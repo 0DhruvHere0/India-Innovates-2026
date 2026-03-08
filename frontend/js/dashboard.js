@@ -1,6 +1,7 @@
 const API_URL = "http://localhost:3000";
 let allReports = [];
 let currentFilter = "ALL";
+let heatLayer;
 const delhiBounds = L.latLngBounds(
     [28.20, 76.80],
     [28.95, 77.80]
@@ -36,15 +37,16 @@ function displayReports() {
     let total = 0;
     let pending = 0;
     let resolved = 0;
-    map.eachLayer(function (layer) {
-        if (layer instanceof L.Marker) {
-            map.removeLayer(layer);
-        }
-    });
+    let heatPoints = [];
     reports.forEach(report => {
         total++;
         if (report.status === "Pending") pending++;
         if (report.status === "Resolved") resolved++;
+        heatPoints.push([
+            report.latitude,
+            report.longitude,
+            report.upvotes + 1
+        ]);
         const li = document.createElement("li");
         li.innerHTML = `
             <strong>Issue:</strong> ${report.issue_category}<br>
@@ -53,9 +55,9 @@ function displayReports() {
             <strong>Support:</strong> 👍 ${report.upvotes}<br>
             <strong>Status:</strong>
             <select class="status" data-id="${report.id}">
-                <option ${report.status === "Pending" ? "selected" : ""}>Pending</option>
-                <option ${report.status === "Under Review" ? "selected" : ""}>Under Review</option>
-                <option ${report.status === "Resolved" ? "selected" : ""}>Resolved</option>
+                <option ${report.status==="Pending"?"selected":""}>Pending</option>
+                <option ${report.status==="Under Review"?"selected":""}>Under Review</option>
+                <option ${report.status==="Resolved"?"selected":""}>Resolved</option>
             </select>
             <br><br>
             <img src="http://localhost:3000/${report.image_url}" width="200">
@@ -71,17 +73,15 @@ function displayReports() {
             </button>
         `;
         reportList.appendChild(li);
-        const marker = L.marker([
-            report.latitude,
-            report.longitude
-        ]).addTo(map);
-        marker.bindPopup(`
-            <strong>${report.issue_category}</strong><br>
-            Colony: ${report.colony}<br>
-            Support: 👍 ${report.upvotes}<br>
-            ${report.description}
-        `);
     });
+    if (heatLayer) {
+        map.removeLayer(heatLayer);
+    }
+    heatLayer = L.heatLayer(heatPoints, {
+        radius: 35,
+        blur: 25,
+        maxZoom: 17
+    }).addTo(map);
     totalReports.innerText = total;
     pendingReports.innerText = pending;
     resolvedReports.innerText = resolved;
@@ -90,7 +90,7 @@ function filterReports(status) {
     currentFilter = status;
     displayReports();
 }
-document.addEventListener("change", async function (e) {
+document.addEventListener("change", async function(e) {
     if (e.target.classList.contains("status")) {
         const id = e.target.dataset.id;
         const status = e.target.value;
@@ -104,7 +104,7 @@ document.addEventListener("change", async function (e) {
         loadReports();
     }
 });
-document.addEventListener("click", async function (e) {
+document.addEventListener("click", async function(e) {
     if (e.target.classList.contains("deleteBtn")) {
         const id = e.target.dataset.id;
         if (confirm("Delete this report?")) {
@@ -115,12 +115,13 @@ document.addEventListener("click", async function (e) {
         }
     }
 });
-document.addEventListener("click", function (e) {
+document.addEventListener("click", function(e) {
     if (e.target.classList.contains("navigateBtn")) {
         const lat = e.target.dataset.lat;
         const lng = e.target.dataset.lng;
         const url =
             `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
         window.open(url, "_blank");
     }
 });
