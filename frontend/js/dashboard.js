@@ -36,7 +36,7 @@ function displayReports() {
     let total = 0;
     let pending = 0;
     let resolved = 0;
-    map.eachLayer(function(layer) {
+    map.eachLayer(function (layer) {
         if (layer instanceof L.Marker) {
             map.removeLayer(layer);
         }
@@ -50,6 +50,7 @@ function displayReports() {
             <strong>Issue:</strong> ${report.issue_category}<br>
             <strong>Colony:</strong> ${report.colony}<br>
             <strong>Description:</strong> ${report.description}<br>
+            <strong>Support:</strong> 👍 ${report.upvotes}<br>
             <strong>Status:</strong>
             <select class="status" data-id="${report.id}">
                 <option ${report.status === "Pending" ? "selected" : ""}>Pending</option>
@@ -62,10 +63,11 @@ function displayReports() {
             <button class="navigateBtn"
                 data-lat="${report.latitude}"
                 data-lng="${report.longitude}">
-                Start Journey
+                Navigate
             </button>
-            <button class="deleteBtn" data-id="${report.id}">
-                Delete Report
+            <button class="deleteBtn"
+                data-id="${report.id}">
+                Delete
             </button>
         `;
         reportList.appendChild(li);
@@ -74,10 +76,10 @@ function displayReports() {
             report.longitude
         ]).addTo(map);
         marker.bindPopup(`
-            <img src="http://localhost:3000/${report.image_url}" width="150"><br>
             <strong>${report.issue_category}</strong><br>
-            ${report.description}<br>
-            Status: ${report.status}
+            Colony: ${report.colony}<br>
+            Support: 👍 ${report.upvotes}<br>
+            ${report.description}
         `);
     });
     totalReports.innerText = total;
@@ -88,7 +90,7 @@ function filterReports(status) {
     currentFilter = status;
     displayReports();
 }
-document.addEventListener("change", async function(e) {
+document.addEventListener("change", async function (e) {
     if (e.target.classList.contains("status")) {
         const id = e.target.dataset.id;
         const status = e.target.value;
@@ -102,7 +104,7 @@ document.addEventListener("change", async function(e) {
         loadReports();
     }
 });
-document.addEventListener("click", async function(e) {
+document.addEventListener("click", async function (e) {
     if (e.target.classList.contains("deleteBtn")) {
         const id = e.target.dataset.id;
         if (confirm("Delete this report?")) {
@@ -113,7 +115,7 @@ document.addEventListener("click", async function(e) {
         }
     }
 });
-document.addEventListener("click", function(e) {
+document.addEventListener("click", function (e) {
     if (e.target.classList.contains("navigateBtn")) {
         const lat = e.target.dataset.lat;
         const lng = e.target.dataset.lng;
