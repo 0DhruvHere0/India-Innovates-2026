@@ -78,9 +78,10 @@ function displayReports() {
         map.removeLayer(heatLayer);
     }
     heatLayer = L.heatLayer(heatPoints, {
-        radius: 35,
-        blur: 25,
-        maxZoom: 17
+        radius: 15,
+        blur: 40,
+        maxZoom: 6,
+        minOpacity: 0.5
     }).addTo(map);
     totalReports.innerText = total;
     pendingReports.innerText = pending;
