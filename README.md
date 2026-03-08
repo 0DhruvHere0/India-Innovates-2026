@@ -12,6 +12,7 @@ Step 3- Start server
 > node server.js
 
 To run frontend
+
 Step 1- Get into frontend folder by
 > cd frontend/
 
