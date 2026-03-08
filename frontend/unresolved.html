@@ -1,20 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unresolved Pollution Issues</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+        }
+        header {
+            background: #1976d2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px;
+        }
+        .filter-box {
+            margin-bottom: 30px;
+        }
+        #colonyFilter {
+            padding: 10px;
+            font-size: 16px;
+            width: 260px;
+        }
+        #issues {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+        .issue-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .issue-card img {
+            width: 100%;
+            border-radius: 6px;
+            margin-top: 12px;
+        }
+        .vote-buttons {
+            margin-top: 15px;
+        }
+        .vote-buttons button {
+            padding: 10px 16px;
+            background: #1976d2;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .vote-buttons button:hover {
+            background: #0d47a1;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background: #eee;
+        }
+        @media (max-width: 768px) {
+            #issues {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 <header>
     <h1>Unresolved Pollution Issues</h1>
+    <p>Support issues in your colony so authorities prioritize them</p>
 </header>
 <div class="container">
-    <label>Filter by Colony</label>
-    <select id="colonyFilter" onchange="filterColony()">
-        <option value="All">All Colonies</option>
-    </select>
+    <div class="filter-box">
+        <label><strong>Filter by Colony</strong></label>
+        <br><br>
+        <select id="colonyFilter" onchange="filterColony()">
+            <option value="All">All Colonies</option>
+        </select>
+    </div>
     <div id="issues"></div>
 </div>
+<footer>
+    <p>Vayumitra – Civic Pollution Reporting Platform</p>
+</footer>
 <script>
 const API_URL = "http://localhost:3000";
 let allReports = [];
@@ -55,7 +132,7 @@ function displayIssues(reports) {
                 <h3>${report.issue_category}</h3>
                 <p><b>Colony:</b> ${report.colony}</p>
                 <p>${report.description}</p>
-                <img src="http://localhost:3000/${report.image_url}" width="250">
+                <img src="http://localhost:3000/${report.image_url}">
                 <div class="vote-buttons">
                     <button onclick="supportIssue('${report.id}')">
                         👍 Support Issue (${report.upvotes})
@@ -66,9 +143,7 @@ function displayIssues(reports) {
         });
 }
 async function supportIssue(id) {
-    await fetch(`${API_URL}/upvote/${id}`, {
-        method: "POST"
-    });
+    await fetch(`${API_URL}/upvote/${id}`, { method: "POST" });
     loadIssues();
 }
 loadIssues();
