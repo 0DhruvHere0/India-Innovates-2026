@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>City Pollution Reporter</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: #1976d2;
+            color: white;
+        }
+        .main-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .main-container h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .main-container label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+        .main-container input,
+        .main-container select,
+        .main-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        .submit-btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background: #0d47a1;
+        }
+        .image-preview img {
+            margin-top: 10px;
+            border-radius: 6px;
+        }
+        .locationBox {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #555;
+        }
+        .actions {
+            margin-top: 40px;
+            text-align: center;
+        }
+        .actions button {
+            margin: 8px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            background: #1976d2;
+            color: white;
+            cursor: pointer;
+        }
+        .actions button:hover {
+            background: #0d47a1;
+        }
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #eee;
+        }
+    </style>
+</head>
+<body>
+<section class="hero">
+    <h1>City Pollution Reporter</h1>
+    <p>Help improve air quality by reporting pollution problems</p>
+</section>
+<div class="main-container">
+    <h2>Report Pollution Issue</h2>
+    <form id="reportForm">
+        <label>Capture Image</label>
+        <input
+            type="file"
+            id="imageInput"
+            accept="image/*"
+            capture="environment"
+            required
+        >
+        <div id="imagePreview" class="image-preview"></div>
+        <label>Colony / Area</label>
+        <input
+            type="text"
+            id="colony"
+            placeholder="Example: Dwarka Sector 9"
+            required
+        >
+        <label>Mobile Number (Optional)</label>
+        <input
+            type="text"
+            id="mobile"
+            placeholder="Enter phone number for updates"
+        >
+        <div class="locationBox">
+            <p id="latitude">Latitude: Detecting...</p>
+            <p id="longitude">Longitude: Detecting...</p>
+        </div>
+        <label>Issue Category</label>
+        <select id="category">
+            <option>Open Construction Dust</option>
+            <option>Uncovered Debris</option>
+            <option>Illegal Dumping</option>
+            <option>Garbage Burning</option>
+            <option>Road Dust</option>
+            <option>Other</option>
+        </select>
+        <label>Description</label>
+        <textarea
+            id="description"
+            rows="4"
+            placeholder="Describe the issue"
+        ></textarea>
+        <button class="submit-btn" type="submit">
+            Submit Report
+        </button>
+    </form>
+    <div id="successMessage"></div>
+</div>
+<div class="actions">
+    <h3>Other Options</h3>
+    <a href="track.html">
+        <button>Track Complaint</button>
+    </a>
+    <a href="unresolved.html">
+        <button>View Unresolved Issues</button>
+    </a>
+    <a href="resolved.html">
+        <button>View Resolved Issues</button>
+    </a>
+</div>
+<footer>
+    <p>Municipal Pollution Monitoring System</p>
+</footer>
+<script src="js/app.js"></script>
+</body>
+</html>
