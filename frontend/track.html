@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Pollution Complaint</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 0;
+            background: #f4f6f9;
+        }
+        header {
+            background: #1976d2;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        .trackBox {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background: #125ca1;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 6px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background: #eee;
+        }
+        img {
+            width: 100%;
+            margin-top: 10px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Track Pollution Complaint</h1>
+        <p>Enter your acknowledgement number to check complaint status</p>
+    </header>
+    <div class="container">
+        <div class="trackBox">
+            <label>Acknowledgement Number</label>
+            <input
+                type="text"
+                id="ackInput"
+                placeholder="Example: RPT-1712053453453"
+            >
+            <button onclick="checkStatus()">
+                Check Status
+            </button>
+            <div id="result"></div>
+        </div>
+    </div>
+    <footer>
+        <p>Municipal Corporation Complaint Tracking System</p>
+    </footer>
+    <script>
+        const API_URL = "http://localhost:3000";
+        async function checkStatus() {
+            const id = document.getElementById("ackInput").value;
+            if (!id) {
+                alert("Please enter acknowledgement number");
+                return;
+            }
+            try {
+                const response = await fetch(`${API_URL}/report-status/${id}`);
+                if (response.status === 404) {
+                    document.getElementById("result").innerHTML = `
+                        <div class="result">
+                            <b>Report not found</b>
+                        </div>
+                    `;
+                    return;
+                }
+                const report = await response.json();
+                document.getElementById("result").innerHTML = `
+                    <div class="result">
+                        <b>Issue:</b> ${report.issue_category}<br><br>
+                        <b>Description:</b> ${report.description}<br><br>
+                        <b>Status:</b> ${report.status}<br><br>
+                        <b>Reported On:</b> ${new Date(report.timestamp).toLocaleString()}<br>
+                        <img src="${API_URL}/${report.image_url}">
+                    </div>
+                `;
+            }
+            catch (error) {
+                console.error(error);
+                alert("Error fetching complaint status");
+
+            }
+        }
+    </script>
+</body>
+</html>
