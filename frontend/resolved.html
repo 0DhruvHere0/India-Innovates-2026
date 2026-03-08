@@ -3,70 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resolved Pollution Issues</title>
+    <title>Unresolved Pollution Issues</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        .container {
-            max-width: 900px;
-            margin: auto;
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+        }
+        header {
+            background: #1976d2;
+            color: white;
             padding: 20px;
+            text-align: center;
+        }
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px;
+        }
+        .search-box {
+            margin-bottom: 30px;
+        }
+        #searchInput {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        #issues {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
         }
         .issue-card {
             background: white;
             padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .likeBtn {
-            background: #4caf50;
-            color: white;
+        .issue-card img {
+            width: 100%;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        .vote-buttons {
+            margin-top: 15px;
+        }
+        .vote-buttons button {
+            padding: 10px 16px;
+            background: #1976d2;
             border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
+            color: white;
+            border-radius: 5px;
             cursor: pointer;
+        }
+        .vote-buttons button:hover {
+            background: #0d47a1;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            background: #eee;
+        }
+        @media (max-width: 768px) {
+            #issues {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Resolved Pollution Issues</h1>
-    </header>
-    <div class="container">
-        <div id="issues"></div>
+<header>
+    <h1>Unresolved Pollution Issues</h1>
+    <p>Support issues in your colony so authorities prioritize them</p>
+</header>
+<div class="container">
+    <div class="search-box">
+        <label><strong>Search Colony</strong></label>
+        <br><br>
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Type colony name..."
+            onkeyup="searchColony()"
+        >
     </div>
-    <script>
-        const API_URL = "http://localhost:3000";
-        async function loadResolved() {
-            const res = await fetch(`${API_URL}/reports`);
-            const reports = await res.json();
-            const container = document.getElementById("issues");
-            container.innerHTML = "";
-            reports
-                .filter(r => r.status === "Resolved")
-                .forEach(report => {
-                    const div = document.createElement("div");
-                    div.className = "issue-card";
-                    div.innerHTML = `
-                        <h3>${report.issue_category}</h3>
-                        <p><b>Colony:</b> ${report.colony}</p>
-                        <p>${report.description}</p>
-                        <img src="http://localhost:3000/${report.image_url}" width="250">
-                        <br><br>
-                        <button class="likeBtn" onclick="likeIssue('${report.id}')">
-                            👍 ${report.likes}
-                        </button>
-                    `;
-                    container.appendChild(div);
-                });
-        }
-        async function likeIssue(id) {
-            await fetch(`${API_URL}/like/${id}`, {
-                method: "POST"
-            });
-            loadResolved();
-        }
-        loadResolved();
-    </script>
+    <div id="issues"></div>
+</div>
+<footer>
+    <p>Vayumitra – Civic Pollution Reporting Platform</p>
+</footer>
+<script>
+const API_URL = "http://localhost:3000";
+let allReports = [];
+async function loadIssues() {
+    const res = await fetch(`${API_URL}/reports`);
+    allReports = await res.json();
+    displayIssues(allReports);
+}
+function searchColony() {
+    const query =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase();
+    const filtered =
+        allReports.filter(report =>
+            report.colony.toLowerCase().includes(query)
+        );
+    displayIssues(filtered);
+}
+function displayIssues(reports) {
+    const container = document.getElementById("issues");
+    container.innerHTML = "";
+    reports
+        .filter(r => r.status !== "Resolved")
+        .forEach(report => {
+            const div = document.createElement("div");
+            div.className = "issue-card";
+            div.innerHTML = `
+                <h3>${report.issue_category}</h3>
+                <p><b>Colony:</b> ${report.colony}</p>
+                <p>${report.description}</p>
+                <img src="http://localhost:3000/${report.image_url}">
+                <div class="vote-buttons">
+                    <button onclick="supportIssue('${report.id}')">
+                        👍 Support Issue (${report.upvotes})
+                    </button>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+}
+async function supportIssue(id) {
+    await fetch(`${API_URL}/upvote/${id}`, {
+        method: "POST"
+    });
+    loadIssues();
+}
+loadIssues();
+</script>
 </body>
 </html>
