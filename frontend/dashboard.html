@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Vayumitra Admin Dashboard</title>
     <link rel="stylesheet" href="css/style.css">
     <link
         rel="stylesheet"
@@ -11,63 +11,51 @@
     >
 </head>
 <body>
-<script>
-if (localStorage.getItem("adminLoggedIn") !== "true") {
-    window.location.href = "admin-login.html";
-}
-</script>
-<header>
-    <h1>MCD Pollution Monitoring Dashboard</h1>
-    <button onclick="logout()">Logout</button>
-</header>
-<div class="dashboard-container">
-<section class="stats">
-    <div class="stat-card">
-        <h3>Total Issues</h3>
-        <p><b id="totalReports">0</b></p>
+    <header>
+        <h1>Vayumitra – MCD Pollution Monitoring Dashboard</h1>
+    </header>
+    <div class="dashboard-container">
+        <section class="stats">
+            <div class="stat-card">
+                <h3>Total Issues</h3>
+                <p><b id="totalReports">0</b></p>
+            </div>
+            <div class="stat-card">
+                <h3>Pending Issues</h3>
+                <p><b id="pendingReports">0</b></p>
+            </div>
+            <div class="stat-card">
+                <h3>Resolved Issues</h3>
+                <p><b id="resolvedReports">0</b></p>
+            </div>
+        </section>
+        <section class="filters">
+            <button onclick="filterReports('ALL')">
+                All Issues
+            </button>
+            <button onclick="filterReports('Pending')">
+                Pending
+            </button>
+            <button onclick="filterReports('Under Review')">
+                Under Review
+            </button>
+            <button onclick="filterReports('Resolved')">
+                Resolved
+            </button>
+        </section>
+        <section>
+            <h2>Pollution Reports Map</h2>
+            <div id="map"></div>
+        </section>
+        <section>
+            <h2>Reports</h2>
+            <ul id="reportList"></ul>
+        </section>
     </div>
-    <div class="stat-card">
-        <h3>Pending Issues</h3>
-        <p><b id="pendingReports">0</b></p>
-    </div>
-    <div class="stat-card">
-        <h3>Resolved Issues</h3>
-        <p><b id="resolvedReports">0</b></p>
-    </div>
-</section>
-<section class="filters">
-    <button onclick="filterReports('ALL')">
-        All Issues
-    </button>
-    <button onclick="filterReports('Pending')">
-        Pending
-    </button>
-    <button onclick="filterReports('Under Review')">
-        Under Review
-    </button>
-    <button onclick="filterReports('Resolved')">
-        Resolved
-    </button>
-</section>
-<section>
-    <h2>Pollution Reports Map</h2>
-    <div id="map"></div>
-</section>
-<section>
-    <h2>Reports</h2>
-    <ul id="reportList"></ul>
-</section>
-</div>
-<footer>
-    <p>Municipal Pollution Monitoring System</p>
-</footer>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="js/dashboard.js"></script>
-<script>
-function logout() {
-    localStorage.removeItem("adminLoggedIn");
-    window.location.href = "admin-login.html";
-}
-</script>
+    <footer>
+        <p>Municipal Corporation of Delhi – Hackathon Project</p>
+    </footer>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="js/dashboard.js"></script>
 </body>
 </html>
