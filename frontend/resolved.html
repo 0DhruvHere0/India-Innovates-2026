@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resolved Pollution Issues</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+        .issue-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+        .likeBtn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Resolved Pollution Issues</h1>
+    </header>
+    <div class="container">
+        <div id="issues"></div>
+    </div>
+    <script>
+        const API_URL = "http://localhost:3000";
+        async function loadResolved() {
+            const res = await fetch(`${API_URL}/reports`);
+            const reports = await res.json();
+            const container = document.getElementById("issues");
+            container.innerHTML = "";
+            reports
+                .filter(r => r.status === "Resolved")
+                .forEach(report => {
+                    const div = document.createElement("div");
+                    div.className = "issue-card";
+                    div.innerHTML = `
+                        <h3>${report.issue_category}</h3>
+                        <p><b>Colony:</b> ${report.colony}</p>
+                        <p>${report.description}</p>
+                        <img src="http://localhost:3000/${report.image_url}" width="250">
+                        <br><br>
+                        <button class="likeBtn" onclick="likeIssue('${report.id}')">
+                            👍 ${report.likes}
+                        </button>
+                    `;
+                    container.appendChild(div);
+                });
+        }
+        async function likeIssue(id) {
+            await fetch(`${API_URL}/like/${id}`, {
+                method: "POST"
+            });
+            loadResolved();
+        }
+        loadResolved();
+    </script>
+</body>
+</html>
