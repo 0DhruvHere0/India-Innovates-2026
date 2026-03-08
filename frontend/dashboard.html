@@ -11,51 +11,44 @@
     >
 </head>
 <body>
-    <header>
-        <h1>Vayumitra – MCD Pollution Monitoring Dashboard</h1>
-    </header>
-    <div class="dashboard-container">
-        <section class="stats">
-            <div class="stat-card">
-                <h3>Total Issues</h3>
-                <p><b id="totalReports">0</b></p>
-            </div>
-            <div class="stat-card">
-                <h3>Pending Issues</h3>
-                <p><b id="pendingReports">0</b></p>
-            </div>
-            <div class="stat-card">
-                <h3>Resolved Issues</h3>
-                <p><b id="resolvedReports">0</b></p>
-            </div>
-        </section>
-        <section class="filters">
-            <button onclick="filterReports('ALL')">
-                All Issues
-            </button>
-            <button onclick="filterReports('Pending')">
-                Pending
-            </button>
-            <button onclick="filterReports('Under Review')">
-                Under Review
-            </button>
-            <button onclick="filterReports('Resolved')">
-                Resolved
-            </button>
-        </section>
-        <section>
-            <h2>Pollution Reports Map</h2>
-            <div id="map"></div>
-        </section>
-        <section>
-            <h2>Reports</h2>
-            <ul id="reportList"></ul>
-        </section>
-    </div>
-    <footer>
-        <p>Municipal Corporation of Delhi – Hackathon Project</p>
-    </footer>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="js/dashboard.js"></script>
+<header>
+    <h1>Vayumitra – MCD Pollution Monitoring Dashboard</h1>
+</header>
+<div class="dashboard-container">
+    <section class="stats">
+        <div class="stat-card">
+            <h3>Total Issues</h3>
+            <p><b id="totalReports">0</b></p>
+        </div>
+        <div class="stat-card">
+            <h3>Pending Issues</h3>
+            <p><b id="pendingReports">0</b></p>
+        </div>
+        <div class="stat-card">
+            <h3>Resolved Issues</h3>
+            <p><b id="resolvedReports">0</b></p>
+        </div>
+    </section>
+    <section class="filters">
+        <button onclick="filterReports('ALL')">All Issues</button>
+        <button onclick="filterReports('Pending')">Pending</button>
+        <button onclick="filterReports('Under Review')">Under Review</button>
+        <button onclick="filterReports('Resolved')">Resolved</button>
+    </section>
+    <section>
+        <h2>Pollution Reports Map</h2>
+        <div id="map" style="height:450px;"></div>
+    </section>
+    <section>
+        <h2>Reports</h2>
+        <ul id="reportList"></ul>
+    </section>
+</div>
+<footer>
+    <p>Municipal Corporation of Delhi – Hackathon Project</p>
+</footer>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
+<script src="js/dashboard.js"></script>
 </body>
 </html>
